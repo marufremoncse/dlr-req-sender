@@ -1,5 +1,6 @@
 package com.codingsense.sender.service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -14,26 +15,39 @@ import com.codingsense.sender.repository.ARepository;
 
 
 @Service
-public class AService {
+public class AService implements ABService{
 	@Autowired
-	ARepository aRepository;
+	private ARepository aRepository;
 	
 	@Autowired
 	Route route;
 	
+	@Override
 	public void queueProcess() {
-		
-		System.out.println("Hello World");
-//		List<A> aList = aRepository.findByStatus('N');
-//		int numThreads = Runtime.getRuntime().availableProcessors();
-//        ExecutorService executorService = Executors.newFixedThreadPool(numThreads);
-//        
-//        for (A a : aList) {
-//        	DlrRequest dlrRequest = a;
-//        	RequestProcessor rp = new RequestProcessor(dlrRequest, route);
-//            executorService.submit(rp);
-//        }
-//
-//        executorService.shutdown();
+		char flag = 'A';
+		System.out.println("Queue Process - A");
+		List<A> aList = aRepository.findByStatus('N');
+		int numThreads = Runtime.getRuntime().availableProcessors();
+		int chunkSize = 2;
+        ExecutorService executorService = Executors.newFixedThreadPool(numThreads);
+        
+        List<DlrRequest> dlrList = new ArrayList<>();
+        
+        for(A a:aList) {
+        	DlrRequest dlrRequest = a;
+        	dlrList.add(dlrRequest);
+        }
+        List<List<DlrRequest>> chunksList = new ArrayList<>();
+        for (int i = 0; i < dlrList.size(); i += chunkSize) {
+            int endIndex = Math.min(i + chunkSize, dlrList.size());
+            List<DlrRequest> chunk = dlrList.subList(i, endIndex);
+            chunksList.add(chunk);
+        }
+        
+        for (List<DlrRequest> chunk : chunksList) {
+        	executorService.execute(new RequestProcessor(chunk, route, flag));
+        }
+
+        executorService.shutdown();
 	}
 }

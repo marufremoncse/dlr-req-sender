@@ -7,6 +7,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.UUID;
 
 import org.json.simple.JSONObject;
@@ -16,7 +17,6 @@ import org.springframework.stereotype.Service;
 
 import com.codingsense.sender.dto.Route;
 import com.codingsense.sender.dto.Status;
-import com.codingsense.sender.impl.DlrRequestImpl;
 import com.codingsense.sender.model.A;
 import com.codingsense.sender.model.DlrRequest;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -27,40 +27,44 @@ import lombok.AllArgsConstructor;
 @Service
 @AllArgsConstructor
 public class RequestProcessor extends Thread{
-	private DlrRequest dlrRequest;
+	private List<DlrRequest> dlrRequestList;
 	private Route route;
+	private char flag;
 	
 	public void run() {
 		String threadName = Thread.currentThread().getName();
-        System.out.println("Task executed by Thread #" + threadName + " for user: " + dlrRequest);
-        UUID uuid = UUID.randomUUID();
-        LinkedHashMap<String, Object> main = new LinkedHashMap<>();
+        System.out.println("Task executed by Thread #" + threadName + " for: " + flag);
         
-        main.put("username", "RanksITT_admin");
-		main.put("password", "ritt@359-!");
-		main.put("messageId", dlrRequest.getMessageId());
-		
-		String deliveryStatus = "";
-		
-		switch(dlrRequest.getMessageStatus()) {
-			case "DELIVERED":
-				deliveryStatus = "Delivered";
-				break;
-			case "NOT_DELIVERED":
-				deliveryStatus = "Undelivered";
-				break;
-			default:
-				deliveryStatus = "Delivery Pending";
-				break;
-		}
-		main.put("status", deliveryStatus);
-		main.put("errorCode", dlrRequest.getGsmError());
-		main.put("mobile", dlrRequest.getMobile());
-		main.put("shortMesssage", dlrRequest.getShortMessage());
-		main.put("submitDate", dlrRequest.getSentDate());
-		main.put("doneDate", dlrRequest.getDoneDate());
-		
-        process(dlrRequest, main, route, uuid);
+        for (DlrRequest dlrRequest : dlrRequestList) {
+        	 UUID uuid = UUID.randomUUID();
+             LinkedHashMap<String, Object> main = new LinkedHashMap<>();
+             
+            main.put("username", "RanksITT_admin");
+     		main.put("password", "ritt@359-!");
+     		main.put("messageId", dlrRequest.getMessageId());
+     		
+     		String deliveryStatus = "";
+     		
+     		switch(((A) dlrRequest).getMessageStatus()) {
+     			case "DELIVERED":
+     				deliveryStatus = "Delivered";
+     				break;
+     			case "NOT_DELIVERED":
+     				deliveryStatus = "Undelivered";
+     				break;
+     			default:
+     				deliveryStatus = "Delivery Pending";
+     				break;
+     		}
+     		main.put("status", deliveryStatus);
+     		main.put("errorCode", dlrRequest.getGsmError());
+     		main.put("mobile", dlrRequest.getMobile());
+     		main.put("shortMesssage", dlrRequest.getShortMessage());
+     		main.put("submitDate", dlrRequest.getSentDate());
+     		main.put("doneDate", dlrRequest.getDoneDate());
+     		
+            process(dlrRequest, main, route, uuid);
+       }
 	}
 	
 	public void process(DlrRequest dlrRequest, HashMap<String, Object> jsonInput, Route route, UUID uuid) {

@@ -1,61 +1,72 @@
 package com.codingsense.sender.model;
 
 import java.time.LocalDateTime;
+import org.hibernate.annotations.ColumnDefault;
+import jakarta.persistence.Column;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Lob;
+import jakarta.persistence.MappedSuperclass;
+import jakarta.persistence.PrePersist;
+import jakarta.persistence.PreUpdate;
+import lombok.Data;
 
-public interface DlrRequest {
-	public long getId();
-
-	public void setId(long id); 
-
-	public String getMessageId(); 
-
-	public void setMessageId(String messageId);
-
-	public String getSentDate(); 
-
-	public void setSentDate(String sentDate); 
-
-	public String getDoneDate(); 
-
-	public void setDoneDate(String doneDate); 
-
-	public String getMessageStatus(); 
-
-	public void setMessageStatus(String messageStatus); 
-
-	public String getGsmError(); 
-
-	public void setGsmError(String gsmError); 
-
-	public String getPrice(); 
-
-	public void setPrice(String price); 
-
-	public String getPduCount();
-
-	public void setPduCount(String pduCount); 
-
-	public String getShortMessage(); 
+@MappedSuperclass
+@Data
+public class DlrRequest {
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private long id;
 	
-	public void setShortMessage(String shortMessage); 
+	@Column(name = "message_id")
+    private String messageId;
 	
-	public String getMobile(); 
+	@Column(name = "sent_date")
+    private String sentDate;
+	
+	@Column(name = "done_date")
+    private String doneDate;
+	
+	@Column(name = "message_status")
+    private String messageStatus;
+	
+	@Column(name = "gsm_error")
+    private String gsmError;
+	
+	@Column(name = "price")
+    private String price;
+	
+	@Column(name = "pdu_count")
+    private String pduCount;
+	
+	@Column(name = "short_message")
+    private String shortMessage;
+	
+	@Column(name = "mobile")
+    private String mobile;
+	
+	@Column(name = "status")
+	@ColumnDefault("'N'")
+    private char status;
+    
+    @Column(name = "created_at")
+    private LocalDateTime createdAt;
+    
+    @Column(name = "updated_at")
+    private LocalDateTime updatedAt;
+    
+    @Lob
+    @Column(name = "api_response", columnDefinition = "TEXT")
+    private String apiResponse;
+    
+    @PrePersist
+    protected void onCreate() {
+        this.createdAt = LocalDateTime.now();
+    }
 
-	public void setMobile(String mobile); 
-
-	public char getStatus(); 
-
-	public void setStatus(char status); 
-
-	public LocalDateTime getCreatedAt(); 
-
-	public void setCreatedAt(LocalDateTime createdAt); 
-
-	public LocalDateTime getUpdatedAt(); 
-
-	public void setUpdatedAt(LocalDateTime updatedAt); 
-
-	public String getApiResponse(); 
-
-	public void setApiResponse(String apiResponse); 
+    @PreUpdate
+    protected void onUpdate() {
+        this.updatedAt = LocalDateTime.now();
+    }
 }
