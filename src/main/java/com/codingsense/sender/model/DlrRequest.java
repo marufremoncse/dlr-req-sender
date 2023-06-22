@@ -1,7 +1,9 @@
 package com.codingsense.sender.model;
 
 import java.time.LocalDateTime;
+
 import org.hibernate.annotations.ColumnDefault;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -17,56 +19,56 @@ import lombok.Data;
 public class DlrRequest {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private long id;
-	
+	public long id;
+
 	@Column(name = "message_id")
-    private String messageId;
-	
+	public String messageId;
+
 	@Column(name = "sent_date")
-    private String sentDate;
-	
+	public String sentDate;
+
 	@Column(name = "done_date")
-    private String doneDate;
-	
+	public String doneDate;
+
 	@Column(name = "message_status")
-    private String messageStatus;
-	
+	public String messageStatus;
+
 	@Column(name = "gsm_error")
-    private String gsmError;
-	
+	public String gsmError;
+
 	@Column(name = "price")
-    private String price;
-	
+	public String price;
+
 	@Column(name = "pdu_count")
-    private String pduCount;
-	
+	public String pduCount;
+
 	@Column(name = "short_message")
-    private String shortMessage;
-	
+	public String shortMessage;
+
 	@Column(name = "mobile")
-    private String mobile;
-	
+	public String mobile;
+
 	@Column(name = "status")
 	@ColumnDefault("'N'")
-    private char status;
-    
-    @Column(name = "created_at")
-    private LocalDateTime createdAt;
-    
-    @Column(name = "updated_at")
-    private LocalDateTime updatedAt;
-    
-    @Lob
-    @Column(name = "api_response", columnDefinition = "TEXT")
-    private String apiResponse;
-    
-    @PrePersist
-    protected void onCreate() {
-        this.createdAt = LocalDateTime.now();
-    }
+	public char status;
 
-    @PreUpdate
-    protected void onUpdate() {
-        this.updatedAt = LocalDateTime.now();
-    }
+	@Column(name = "created_at")
+	public LocalDateTime createdAt;
+
+	@Column(name = "updated_at")
+	public LocalDateTime updatedAt;
+
+	@Lob
+	@Column(name = "api_response", columnDefinition = "TEXT")
+	public String apiResponse;
+
+	@PrePersist
+	public void onCreate() {
+		this.createdAt = LocalDateTime.now();
+	}
+
+	@PreUpdate
+	public void onUpdate() {
+		this.updatedAt = LocalDateTime.now();
+	}
 }

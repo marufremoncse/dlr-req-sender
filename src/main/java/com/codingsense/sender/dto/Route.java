@@ -7,18 +7,18 @@ import lombok.Data;
 @Configuration
 @Data
 public class Route {
-	private String apiRoot = "https://api.mnpspbd.com";
-	private String userIdParam = "user";
-	private String passParam = "password";
-	private String msisdnParam = "GSM";
-	private String senderParam = "sender";
-	private String smsTextParam = "SMSText";
+	private String apiRoot;
+	private String userIdParam;
+	private String passParam;
+	private String msisdnParam;
+	private String senderParam;
+	private String smsTextParam;
 	private String userIdValue;
 	private String passValue;
-	private String senderValue = "";
+	private String senderValue;
 	
 	public Route(){
-		this.apiRoot = "https://api.mnpspbd.com";
+		this.apiRoot = "http://localhost:8082";     //  "https://api.mnpspbd.com"
 		this.userIdParam = "user";
 		this.passParam = "password";
 		this.msisdnParam = "GSM";
