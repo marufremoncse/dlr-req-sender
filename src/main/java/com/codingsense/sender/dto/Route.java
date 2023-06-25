@@ -16,9 +16,9 @@ public class Route {
 	private String userIdValue;
 	private String passValue;
 	private String senderValue;
-	
-	public Route(){
-		this.apiRoot = "http://localhost:8082";     //  "https://api.mnpspbd.com"
+
+	public Route() {
+		this.apiRoot = "http://localhost:8080"; // "https://api.mnpspbd.com"
 		this.userIdParam = "user";
 		this.passParam = "password";
 		this.msisdnParam = "GSM";

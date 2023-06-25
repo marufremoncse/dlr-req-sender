@@ -6,6 +6,9 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.codingsense.sender.model.B;
 
-public interface BRepository extends JpaRepository<B, Long>{
+public interface BRepository extends JpaRepository<B, Long> {
 	List<B> findByStatus(char status);
+
+	@Override
+	long count();
 }

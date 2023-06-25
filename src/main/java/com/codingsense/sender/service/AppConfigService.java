@@ -19,6 +19,7 @@ public class AppConfigService {
 	AppConfigRepository appConfigRepository;
 
 	private char flag = 'A';
+	private int numThread;
 
 	@Bean
 	char myCharBean() {
@@ -29,6 +30,7 @@ public class AppConfigService {
 		try {
 			Optional<AppConfig> appConfigOptional = appConfigRepository.findById(1);
 			AppConfig appConfig = appConfigOptional.get();
+			numThread = appConfig.getNumThread();
 
 			if (appConfig.getAppConf() == 1)
 				return true;

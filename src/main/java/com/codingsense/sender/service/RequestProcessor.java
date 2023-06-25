@@ -86,17 +86,21 @@ public class RequestProcessor extends Thread {
 				A a = aOptional.get();
 				a.setApiResponse(response);
 				a.setStatus('P');
+				aRepository.save(a);
+
 				dump.setApiResponse(response);
 				dump.setStatus('A');
-				aRepository.save(a);
+
 			} else {
 				Optional<B> bOptional = bRepository.findById(dlrRequest.getId());
 				B b = bOptional.get();
 				b.setApiResponse(response);
 				b.setStatus('P');
+				bRepository.save(b);
+
 				dump.setApiResponse(response);
 				dump.setStatus('B');
-				bRepository.save(b);
+
 			}
 
 			dumpRepository.save(dump);
